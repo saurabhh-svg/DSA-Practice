@@ -45,7 +45,6 @@ class Node {
      
        if(root!=NULL)
        {
-
            x=height(root->left);
            y=height(root->right);
            if(x>y)

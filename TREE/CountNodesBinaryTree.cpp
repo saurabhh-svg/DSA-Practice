@@ -50,16 +50,35 @@ class Node {
 
 */
 
-   int countNodes(Node *p) //pass pointer to root
+   int countNodes(Node *root) //pass pointer to root
 {
     int x=0,y=0;
-    if(p!=NULL)
+    if(root!=NULL)
     {
-      countNodes(p->left);
-      countNodes(p->right);
+      x=countNodes(root->left);
+      y=countNodes(root->right);
       return x+y+1;
     } 
       return 0;
 }
+
+//nodes for degree two
+
+   int countNodes(Node *root) //pass pointer to root
+{
+    int x=0,y=0;
+    if(root!=NULL)
+    {
+      x=countNodes(root->left);
+      y=countNodes(root->right);
+      if(root->left && root->right)
+      return x+y+1;
+      else
+          return x + y;
+    }
+      return 0;
+}
+
+
 
 }; //End of Solution
