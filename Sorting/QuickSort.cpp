@@ -24,25 +24,21 @@ int partion(int a[],int l,int h){
    do{
     do{i++; } while (a[i] <= pivot);
     do { j--; } while (a[j] > pivot);
-    if(i<j)
-        swap(a[i], a[j]);
-   } while (i < j); 
-   // while loop breaks when i>j
+    if(i<j) swap(a[i], a[j]);
+   } while (i < j); // while loop breaks when i>j
    swap(a[l], a[j]);
    return j; // partioning position
 }
 
 void quickSort(int a[], int start,int end){
-        if (start < end)
-        {
+        if (start < end){
          int j = partion(a, start, end);
             quickSort(a, start, j );
             quickSort(a, j + 1, end);
         }
 }
 
-int main()
-{
+int main(){
     int A[] = {11, 13, 7, 12, 16, 9, 24, 5, 10, 3,INT_MAX}, n = 11;
     quickSort(A, 0,n-1);
     for (int i = 0; i < 10; i++)
