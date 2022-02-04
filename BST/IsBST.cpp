@@ -3,8 +3,7 @@
 #include <queue>
 using namespace std;
 
-BinaryTreeNode<int> *takeInputLevelWise()
-{
+BinaryTreeNode<int> *takeInputLevelWise(){
     int rootData;
     cout << "Enter Root Data" << endl;
     cin >> rootData;
@@ -13,16 +12,13 @@ BinaryTreeNode<int> *takeInputLevelWise()
     BinaryTreeNode<int> *root = new BinaryTreeNode<int>(rootData);
     queue<BinaryTreeNode<int> *> pendingNodes;
     pendingNodes.push(root);
-
-    while (pendingNodes.size() != 0)
-    {
+    while (pendingNodes.size() != 0){
         BinaryTreeNode<int> *front = pendingNodes.front();
         pendingNodes.pop();
         cout << "Enter Left child of " << front->data << endl;
         int leftChildData;
         cin >> leftChildData;
-        if (leftChildData != -1)
-        {
+        if (leftChildData != -1)  {
             BinaryTreeNode<int> *child = new BinaryTreeNode<int>(leftChildData);
             front->left = child;
             pendingNodes.push(child);
@@ -30,8 +26,7 @@ BinaryTreeNode<int> *takeInputLevelWise()
         cout << "Enter Right child of " << front->data << endl;
         int rightChildData;
         cin >> rightChildData;
-        if (rightChildData != -1)
-        {
+        if (rightChildData != -1)  {
             BinaryTreeNode<int> *child = new BinaryTreeNode<int>(rightChildData);
             front->right = child;
             pendingNodes.push(child);
@@ -64,47 +59,68 @@ void PrintLevelWise(BinaryTreeNode<int> *root)
     }
 }
 
-int height(BinaryTreeNode<int> *root)
+int maxim(BinaryTreeNode<int> *root)
 {
     if (root == NULL)
-        return 0;
-    return 1 + max(height(root->left), height(root->right));
+        return INT_MIN;
+    return max(root->data,max(maxim(root->left),maxim(root->right)));
 }
-// max dist bw any 2 nodes -> O(n^2) -> worstCase
-int diameter(BinaryTreeNode<int> *root)
+int minim(BinaryTreeNode<int> *root)
 {
     if (root == NULL)
-        return 0;
-    int option1 = height(root->left) + height(root->right);
-    int option2 = diameter(root->left);
-    int option3 = diameter(root->right);
+        return INT_MAX;
+    return min(root->data, min(maxim(root->left), maxim(root->right)));
+}
 
-    return max(option1, max(option2, option3));
+bool IsBST(BinaryTreeNode<int> *root)
+{
+    if(root==NULL)
+        return true;
+    int leftmax = maxim(root->left);
+    int rightmin = minim(root->right);
+    bool output = (root->data > leftmax) && (root->data < rightmin) && IsBST(root->left) && IsBST(root->right);
+    return output;
 }
-// Better O(n) ->Worstcase
-pair<int, int> heightDiameter(BinaryTreeNode<int> *root)
+class ISBSTReturn
+{
+public:
+    int maximum;
+    int minimum;
+    bool IsBst;
+};
+//Better appraoch ********************
+
+ISBSTReturn IsBST2(BinaryTreeNode<int> *root)
 {
     if (root == NULL)
     {
-        pair<int, int> p;
-        p.first = 0;
-        p.second = 0;
-        return p;
+        ISBSTReturn obj;
+        obj.IsBst = true;
+        obj.maximum = INT16_MIN;
+        obj.minimum = INT16_MAX;
+        return obj;
     }
-    pair<int, int> leftAns = heightDiameter(root->left);
-    pair<int, int> rightAns = heightDiameter(root->right);
-    int lh = leftAns.first;
-    int ld = leftAns.second;
-    int rh = rightAns.first;
-    int rd = rightAns.second;
-    int height = 1 + max(lh, rh);
-    int diameter = max(lh + rh, max(ld, rd));
-    pair<int, int> p;
-    p.first = height;
-    p.second = diameter;
-    return p;
+    ISBSTReturn leftOutput = IsBST2(root->left);
+    ISBSTReturn rightOutput = IsBST2(root->right);
+    int mini = min(root->data, min(leftOutput.maximum, rightOutput.minimum));
+    int maxi = max(root->data, max(leftOutput.maximum, rightOutput.minimum));
+    bool isbstFinal = (root->data > leftOutput.maximum) && (root->data <= leftOutput.minimum) && leftOutput.IsBst && rightOutput.IsBst;
+    ISBSTReturn obj;
+    obj.minimum = mini;
+    obj.maximum = maxi;
+    obj.IsBst = isbstFinal;
+    return obj;
 }
-
+bool isBST3(BinaryTreeNode<int>* root,int min=INT_MIN, int max=INT_MAX){
+    if(root==NULL)
+        return true;
+        if(root->data<min || root->data>max)
+            return false;
+        bool isLeftok = isBST3(root->left, min, root->data - 1);
+        bool isRightok = isBST3(root->right, root->data + 1, max);
+        bool ans = isLeftok && isRightok;
+        return ans;
+}
 int main()
 {
     // BinaryTreeNode<int> *root = new BinaryTreeNode<int>(1);
@@ -116,12 +132,11 @@ int main()
     // BinaryTreeNode<int> *root = takeinput();
 
     BinaryTreeNode<int> *root = takeInputLevelWise();
-    pair<int, int> p = heightDiameter(root);
-    cout << "height" << p.first << endl;
-    cout << "diameter" << p.second;
-    // PrintLevelWise(root);
+    ISBSTReturn ob;
+    cout << isBST3(root) << endl;
     delete root;
 }
 
 // for input copy paste ->
 //  1 2 3 4 5 6 7 -1 -1 -1 -1 8 9 -1 -1 -1 -1 -1 -1
+// 4 2 6 1 3 5 7 -1 -1 -1 -1 -1 -1 -1 -1

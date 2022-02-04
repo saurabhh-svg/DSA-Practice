@@ -63,46 +63,17 @@ void PrintLevelWise(BinaryTreeNode<int> *root)
         cout << endl;
     }
 }
+void PrintElementsBetween(BinaryTreeNode<int> *root, int k1, int k2)
+{
+    if (root == NULL)
+        return;
 
-int height(BinaryTreeNode<int> *root)
-{
-    if (root == NULL)
-        return 0;
-    return 1 + max(height(root->left), height(root->right));
-}
-// max dist bw any 2 nodes -> O(n^2) -> worstCase
-int diameter(BinaryTreeNode<int> *root)
-{
-    if (root == NULL)
-        return 0;
-    int option1 = height(root->left) + height(root->right);
-    int option2 = diameter(root->left);
-    int option3 = diameter(root->right);
-
-    return max(option1, max(option2, option3));
-}
-// Better O(n) ->Worstcase
-pair<int, int> heightDiameter(BinaryTreeNode<int> *root)
-{
-    if (root == NULL)
-    {
-        pair<int, int> p;
-        p.first = 0;
-        p.second = 0;
-        return p;
-    }
-    pair<int, int> leftAns = heightDiameter(root->left);
-    pair<int, int> rightAns = heightDiameter(root->right);
-    int lh = leftAns.first;
-    int ld = leftAns.second;
-    int rh = rightAns.first;
-    int rd = rightAns.second;
-    int height = 1 + max(lh, rh);
-    int diameter = max(lh + rh, max(ld, rd));
-    pair<int, int> p;
-    p.first = height;
-    p.second = diameter;
-    return p;
+    if (root->data >= k1 && root->data <= k2)
+        cout << root->data << endl;
+    if (root->data <= k2)
+        PrintElementsBetween(root->left, k1, k2);
+    if (root->data >= k1)
+        PrintElementsBetween(root->right, k1, k2);
 }
 
 int main()
@@ -114,12 +85,11 @@ int main()
     // root->right = node2;
 
     // BinaryTreeNode<int> *root = takeinput();
-
+    int k1, k2;
+    cin >> k1 >> k2;
     BinaryTreeNode<int> *root = takeInputLevelWise();
-    pair<int, int> p = heightDiameter(root);
-    cout << "height" << p.first << endl;
-    cout << "diameter" << p.second;
-    // PrintLevelWise(root);
+
+    PrintElementsBetween(root, k1, k2);
     delete root;
 }
 
