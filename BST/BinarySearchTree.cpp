@@ -1,7 +1,8 @@
-#include <iostream>
-#include "BinaryTreeNode.h"
+#include<iostream>
+#include "BST.h"
 #include <queue>
 using namespace std;
+
 
 BinaryTreeNode<int> *takeInputLevelWise()
 {
@@ -40,32 +41,21 @@ BinaryTreeNode<int> *takeInputLevelWise()
     return root;
 }
 
-vector<int>* getRootToNodePath(BinaryTreeNode<int>* root,int key){
-    if(root==NULL)
-        return NULL;
-        if(root->data==key){
-            vector<int>* output = new vector<int>();
-            output->push_back(root->data);
-            return output;
-        }
-        vector<int>* leftoutput = getRootToNodePath(root->left, key);
-        if (leftoutput != NULL){
-            leftoutput->push_back(root->data);
-            return leftoutput;
-        }
-        vector<int> *rightOutput = getRootToNodePath(root->right, key);
-            if(rightOutput!=NULL){
-            rightOutput->push_back(root->data);
-            return rightOutput;
-            }else return NULL;
-}
+
 
 int main()
 {
-    BinaryTreeNode<int> *root = takeInputLevelWise();
-    vector<int>* op = getRootToNodePath(root, 7);
-    for (int i = 0; i < op->size();i++)
-        cout << op->at(i) << " -> ";
+    BST b;
+    b.insert(10);
+    b.insert(5);
+    b.insert(20);
+    b.insert(7);
+    b.insert(13);
+    b.insert(3);
+    b.insert(15);
+   // b.printTree();
+    b.deleteData(10);
+    b.printTree();
 }
 
 // for input copy paste ->

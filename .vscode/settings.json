@@ -2,6 +2,7 @@
   "files.associations": {
     "*.ejs": "html",
     "queue": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "algorithm": "cpp"
   }
 }

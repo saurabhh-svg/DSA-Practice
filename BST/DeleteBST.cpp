@@ -1,84 +1,38 @@
 #include <iostream>
-#include "BinaryTreeNode.h"
+#include "BST.h"
 #include <queue>
 using namespace std;
-
-void PrintLevelWise(BinaryTreeNode<int> *root)
+int height(BinaryTreeNode<int> *node)
 {
-    queue<BinaryTreeNode<int> *> pendingNodes;
-    pendingNodes.push(root);
-
-    while (pendingNodes.size() != 0)
-    {
-        BinaryTreeNode<int> *front = pendingNodes.front();
-        pendingNodes.pop();
-        cout << front->data << ":";
-        if (front->left != NULL)
-        {
-            cout << " L" << front->left->data;
-            pendingNodes.push(front->left);
-        }
-        if (front->right != NULL)
-        {
-            cout << " R" << front->right->data;
-            pendingNodes.push(front->right);
-        }
-        cout << endl;
-    }
+    if (node == NULL)
+        return 0;
+    return 1 + max(height(node->left), height(node->right));
 }
-BinaryTreeNode<int> *InsertinBst(BinaryTreeNode<int> *root, int key)
+
+BinaryTreeNode<int> *DeleteinBST(BinaryTreeNode<int> *root, int key)
 {
-
-    BinaryTreeNode<int> *Insertme = new BinaryTreeNode<int>(0);
-    Insertme->data = key;
-    Insertme->left = NULL;
-    Insertme->right = NULL;
     if (root == NULL)
-        return Insertme;
-
+    {
+        return NULL;
+    }
+    if (root->data == key)
+    {
+    }
     if (key < root->data)
-        root->left = InsertinBst(root->left, key);
-    if (key > root->data)
-        root->right = InsertinBst(root->right, key);
+        root->left = DeleteinBST(root->left, key);
+    else if (key > root->data)
+        root->right = DeleteinBST(root->right, key);
+    else
+    {
+        if (height(root->left) > height(root->right))
+        {
+        }
+    }
 
     return root;
 }
-BinaryTreeNode<int> *DeleteinBST(BinaryTreeNode<int> *root, int key) {
-if(root==NULL){
-    return NULL;
-}
-if(root->data==key){
-
-}
-if(key<root->data)
-    root->left = DeleteinBST(root->left, key);
-else if (key>root->data )
-    root->right = DeleteinBST(root->right, key);
-    else{
-        if(height(root->left)>height(root))
-    }
-
-return root;
-}
 int main()
 {
-    // BinaryTreeNode<int> *root = new BinaryTreeNode<int>(1);
-    // BinaryTreeNode<int> *node1 = new BinaryTreeNode<int>(2);
-    // BinaryTreeNode<int> *node2 = new BinaryTreeNode<int>(3);
-    // root->left = node1;
-    // root->right = node2;
-    // BinaryTreeNode<int> *root = takeinput();
-
-    BinaryTreeNode<int> *root = new BinaryTreeNode<int>(10);
-
-    InsertinBst(root, 5);
-    InsertinBst(root, 8);
-    InsertinBst(root, 20);
-    InsertinBst(root, 30);
-
-    PrintLevelWise(root);
-
-    delete root;
 }
 
 // for input copy paste ->
